@@ -1,16 +1,37 @@
 import React from 'react';
-import {Platform} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {HomeScreen, WebViewScreen} from './screens';
 
 const Stack = createStackNavigator();
 
+const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+  },
+});
+
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="screena">
+      <Stack.Navigator
+        initialRouteName="screena"
+        screenOptions={{
+          headerBackground: () => (
+            <LinearGradient
+              colors={['#2F80ED', '#56CCF2']}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              style={styles.linearGradient}
+            />
+          ),
+          headerTitleStyle: {
+            color: 'white',
+          },
+        }}>
         <Stack.Screen
           name="homescreen"
           component={HomeScreen}
