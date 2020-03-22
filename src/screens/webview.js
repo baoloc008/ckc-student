@@ -1,5 +1,5 @@
 import React, {useState, useRef, useLayoutEffect} from 'react';
-import {ActivityIndicator, StyleSheet, Text, BackHandler} from 'react-native';
+import {ActivityIndicator, StyleSheet, BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -41,13 +41,13 @@ const WebViewScreen = props => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerLeft: () => <Text onPress={handleOnBackPress}>Back</Text>,
       headerLeft: () => (
         <Icon
           name={'arrow-back'}
           size={30}
           color="white"
           onPress={handleOnBackPress}
+          style={{marginLeft: 8}}
         />
       ),
     });
