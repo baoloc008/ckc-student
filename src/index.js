@@ -50,7 +50,7 @@ const App = () => {
             headerBackTitleVisible: false,
             headerTitleAllowFontScaling: false,
             headerTitleContainerStyle: {
-              width: '75%',
+              width: '65%',
               alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
             },
           }}
