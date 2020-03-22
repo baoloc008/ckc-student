@@ -1,2 +1,2 @@
-export {default as ScreenA} from './screen-a';
-export {default as ScreenB} from './screen-b';
+export {default as HomeScreen} from './home';
+export {default as WebViewScreen} from './webview';

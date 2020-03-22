@@ -1,0 +1,59 @@
+import React, {useState, useRef, useLayoutEffect} from 'react';
+import {ActivityIndicator, StyleSheet, Text} from 'react-native';
+import {WebView} from 'react-native-webview';
+import {useNavigation, useRoute} from '@react-navigation/native';
+
+const styles = StyleSheet.create({
+  indicatorStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  webViewStyle: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+  },
+});
+
+const WebViewScreen = props => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {uri} = route.params;
+
+  const webViewRef = useRef(null);
+  const [canWebGoBack, setCanWebGoBack] = useState(false);
+  const handleWebViewNavigationStateChange = newNavState => {
+    const {canGoBack} = newNavState;
+    setCanWebGoBack(canGoBack);
+  };
+
+  const handleOnBackPress = () => {
+    if (canWebGoBack) {
+      webViewRef && webViewRef.current.goBack();
+    } else {
+      navigation.goBack();
+    }
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <Text onPress={handleOnBackPress}>Back</Text>,
+    });
+  });
+
+  return (
+    <WebView
+      source={{uri}}
+      startInLoadingState={true}
+      renderLoading={() => (
+        <ActivityIndicator size="large" style={styles.indicatorStyle} />
+      )}
+      style={styles.webViewStyle}
+      ref={webViewRef}
+      onNavigationStateChange={handleWebViewNavigationStateChange}
+    />
+  );
+};
+
+export default WebViewScreen;

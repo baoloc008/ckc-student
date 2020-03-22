@@ -1,8 +1,9 @@
 import React from 'react';
+import {Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import {ScreenA, ScreenB} from './screens';
+import {HomeScreen, WebViewScreen} from './screens';
 
 const Stack = createStackNavigator();
 
@@ -11,14 +12,22 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="screena">
         <Stack.Screen
-          name="screena"
-          component={ScreenA}
-          options={{title: 'Screen A Title'}}
+          name="homescreen"
+          component={HomeScreen}
+          options={{title: 'CKC Student'}}
         />
         <Stack.Screen
-          name="screenb"
-          component={ScreenB}
-          options={{title: 'Screen B Title', headerBackTitle: 'Trở về'}}
+          name="webviewscreen"
+          component={WebViewScreen}
+          options={{
+            title: 'Trường Cao Đẳng Kỹ Thuật Cao Thắng',
+            headerBackTitleVisible: false,
+            headerTitleAllowFontScaling: false,
+            headerTitleContainerStyle: {
+              width: '75%',
+              alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
+            },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
