@@ -1,15 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
-import AppData from '../../data.json';
-
-const fakeApi = () => Promise.resolve(AppData);
+import {ScrollView} from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,16 +16,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    padding: 16,
   },
   itemContainer: {
-    // backgroundColor: 'lightgreen',
     width: '45%',
-    // flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 30,
-    // margin: 10,
   },
   itemImage: {
     width: 75,
@@ -35,19 +30,53 @@ const styles = StyleSheet.create({
   itemText: {
     marginTop: 12,
   },
+  indicatorStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerImage: {
+    height: 100,
+    width: '100%',
+  },
 });
 
 const HomeScreen = props => {
   const [appData, setAppData] = useState([]);
+  const [isLoadingAppData, setIsLoadingAppData] = useState(true);
+  const [haveError, setHaveError] = useState(false);
   const {navigation} = props;
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const handleLoadAppInfo = () => {
+    return fetch(
+      'https://api.github.com/gists/cafb8bba1457079952bcb25e766fbfdd',
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        setIsLoadingAppData(false);
+        setAppData(JSON.parse(responseJson.files['ckc-student.json'].content));
+      })
+      .catch(() => setHaveError(true));
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    handleLoadAppInfo().then(() => setRefreshing(false));
+  }, [refreshing]);
+
   useEffect(() => {
-    fakeApi().then(resp => setAppData(resp));
+    handleLoadAppInfo();
   }, []);
 
   const handleOnPressItem = item => {
     navigation.push('webviewscreen', {uri: item.weburl});
   };
-
   const renderItem = item => {
     return (
       <TouchableOpacity
@@ -59,12 +88,42 @@ const HomeScreen = props => {
       </TouchableOpacity>
     );
   };
-  const webList = appData.map(item => renderItem(item));
+
+  const renderMainContent = () => {
+    if (haveError) {
+      return (
+        <View style={styles.errorView}>
+          <Text>Đã có lỗi xảy ra</Text>
+        </View>
+      );
+    }
+    if (isLoadingAppData) {
+      return <ActivityIndicator size="large" style={styles.indicatorStyle} />;
+    }
+    const webList = appData.map(item => renderItem(item));
+
+    return (
+      <View style={{flex: 1}}>
+        <Image
+          source={{
+            uri: 'http://ctct.caothang.edu.vn/templates/images/banner.png',
+          }}
+          style={styles.headerImage}
+          resizeMode="contain"
+        />
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{webList}</View>
+      </View>
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      {/* <FlatList data={appData} renderItem={renderItem} numColumns={2} /> */}
-      {webList}
-    </View>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      {renderMainContent()}
+    </ScrollView>
   );
 };
 
