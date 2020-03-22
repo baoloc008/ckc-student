@@ -2,7 +2,7 @@ import React, {useState, useRef, useLayoutEffect} from 'react';
 import {ActivityIndicator, StyleSheet, Text, BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useEventListener} from '../hooks';
 
 const styles = StyleSheet.create({
@@ -42,7 +42,14 @@ const WebViewScreen = props => {
   useLayoutEffect(() => {
     navigation.setOptions({
       // headerLeft: () => <Text onPress={handleOnBackPress}>Back</Text>,
-      headerLeft: () => <Icon name="rocket" size={30} color="#900" />,
+      headerLeft: () => (
+        <Icon
+          name={'arrow-back'}
+          size={30}
+          color="white"
+          onPress={handleOnBackPress}
+        />
+      ),
     });
   });
 
