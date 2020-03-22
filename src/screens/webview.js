@@ -1,7 +1,8 @@
 import React, {useState, useRef, useLayoutEffect} from 'react';
-import {ActivityIndicator, StyleSheet, Text} from 'react-native';
+import {ActivityIndicator, StyleSheet, Text, BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {useEventListener} from '../hooks';
 
 const styles = StyleSheet.create({
   indicatorStyle: {
@@ -34,6 +35,7 @@ const WebViewScreen = props => {
     } else {
       navigation.goBack();
     }
+    return true;
   };
 
   useLayoutEffect(() => {
@@ -41,6 +43,8 @@ const WebViewScreen = props => {
       headerLeft: () => <Text onPress={handleOnBackPress}>Back</Text>,
     });
   });
+
+  useEventListener(BackHandler, 'hardwareBackPress', handleOnBackPress);
 
   return (
     <WebView
