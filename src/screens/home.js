@@ -51,7 +51,7 @@ const HomeScreen = props => {
   const [isLoadingAppData, setIsLoadingAppData] = useState(true);
   const [haveError, setHaveError] = useState(false);
   const {navigation} = props;
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleLoadAppInfo = () => {
     return fetch(
@@ -68,7 +68,7 @@ const HomeScreen = props => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     handleLoadAppInfo().then(() => setRefreshing(false));
-  }, [refreshing]);
+  }, []);
 
   useEffect(() => {
     handleLoadAppInfo();
@@ -97,7 +97,7 @@ const HomeScreen = props => {
         </View>
       );
     }
-    if (isLoadingAppData) {
+    if (isLoadingAppData || refreshing) {
       return <ActivityIndicator size="large" style={styles.indicatorStyle} />;
     }
     const webList = appData.map(item => renderItem(item));
