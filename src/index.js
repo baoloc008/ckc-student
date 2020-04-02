@@ -19,44 +19,18 @@ const App = () => {
     <NavigationContainer>
       <StatusBar
         translucent={true}
-        backgroundColor={'transparent'}
-        barStyle="light-content"
+        backgroundColor={'red'}
+        barStyle="dark-content"
       />
-      <Stack.Navigator
-        initialRouteName="screena"
-        screenOptions={{
-          headerBackground: () => (
-            <LinearGradient
-              colors={['#2F80ED', '#56CCF2']}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              style={styles.linearGradient}
-            />
-          ),
-          headerTitleStyle: {
-            color: 'white',
-          },
-        }}>
+      <Stack.Navigator>
         <Stack.Screen
           name="homescreen"
           component={HomeScreen}
-          options={{title: 'CKC Student'}}
-        />
-        <Stack.Screen
-          name="webviewscreen"
-          component={WebViewScreen}
-          options={{
-            title: 'Trường Cao Đẳng Kỹ Thuật Cao Thắng',
-            headerBackTitleVisible: false,
-            headerTitleAllowFontScaling: false,
-            headerTitleContainerStyle: {
-              width: '65%',
-              alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',
-            },
-          }}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
 export default App;
